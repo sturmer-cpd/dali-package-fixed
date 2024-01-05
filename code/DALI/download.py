@@ -4,6 +4,10 @@ import yt_dlp as youtube_dl
 
 base_url = 'http://www.youtube.com/watch?v='
 
+# Read environment variables
+ffmpeg_path = os.getenv('FFMPEG_BINARY', "/home/sagemaker-user/.conda/envs/conda_env/bin/ffmpeg")
+ffprobe_path = os.getenv('FFPROBE_BINARY', "/home/sagemaker-user/.conda/envs/conda_env/bin/ffprobe")
+
 
 class MyLogger(object):
     def debug(self, msg):
@@ -20,10 +24,13 @@ def my_hook(d):
     if d['status'] == 'finished':
         print('Done downloading, now converting ...')
 
+
+
 def get_my_ydl(directory, name):
     if ut.check_directory(directory):
         outtmpl = os.path.join(directory, f'{name}.%(ext)s')  # Use name here
         ydl_opts = {
+            'ffmpeg_location': ffmpeg_path,
             'format': 'bestaudio/best',
             'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'mp3', 'preferredquality': '320'}],
             'outtmpl': outtmpl,
