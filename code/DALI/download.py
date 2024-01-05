@@ -49,6 +49,15 @@ def get_my_ydl(directory, name):
 
 def audio_from_url(url, name, path_output, errors=[]):
     error = None
+    filename = os.path.join(path_output, f'{name}.mp3')  # Assuming the files are saved as .mp3
+
+    # Check if the file already exists
+    if os.path.exists(filename):
+        print(f"File {filename} already exists. Skipping download.")
+        return
+    
+    print(f"filename: {filename} does NOT exist yet, so will be downloaded now.")
+    
     ydl = get_my_ydl(path_output, name)  # Pass name here
 
     if ydl:
